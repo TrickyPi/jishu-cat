@@ -6,7 +6,7 @@ const PREFIXREPLY = "!";
 const clientCommands = new Discord.Collection();
 let frqS = 0;
 setInterval(() => {
-    frqS--;
+    frqS = 0;
 }, 60000);
 const commands = fse
     .readdirSync("./commands/")
@@ -24,8 +24,10 @@ client.on("ready", () => {
 client.on("message", (msg) => {
     if (!msg.content.startsWith(PREFIXREPLY)) return;
     let content = msg.content.slice(PREFIXREPLY.length).toLowerCase();
-    if (msg.author.username === "Rainy" && frqS === 3) {
+    if (msg.author.username === "Rainy" || msg.author.username === "TrickyPi") {
         frqS++;
+    }
+    if (frqS === 4) {
         msg.reply("别瞎几把发了,好好上班；");
         return;
     }
