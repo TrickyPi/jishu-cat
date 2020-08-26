@@ -3,18 +3,21 @@ const fse = require("fs-extra");
 const TOKEN = require("./token"); //private
 const client = new Discord.Client();
 const PREFIXREPLY = "!";
-const clientCommands = new Discord.Collection();
+
+client.commands = new Discord.Collection();
+
 let frqS = 0;
 setInterval(() => {
     frqS = 0;
 }, 60000);
+
 const commands = fse
     .readdirSync("./commands/")
     .filter((item) => item.endsWith(".js"));
 
 commands.forEach((item) => {
     const command = require(`./commands/${item}`);
-    clientCommands.set(command.name, command);
+    client.commands.set(command.name, command);
 });
 
 client.on("ready", () => {
@@ -32,7 +35,7 @@ client.on("message", (msg) => {
         return;
     }
     if (content === "hello") {
-        clientCommands.get("hello").execute(msg, content);
+        client.commands.get("hello").execute(msg, content);
     }
 });
 
